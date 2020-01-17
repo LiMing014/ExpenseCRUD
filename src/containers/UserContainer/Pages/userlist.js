@@ -5,8 +5,10 @@ import { PropTypes } from 'prop-types';
 import {
     withRouter
 } from 'react-router-dom';
+import TableTitle from '../../../components/TableTitle';
+import TableHeader from '../../../components/TableHeader';
 import { deleteUser } from '../Redux/actions';
-import Dialog from './dialog';
+import Dialog from '../../../components/Dialog';
 
 class UserList extends Component{
     constructor(props) {    //To history we have to set the constructor 
@@ -51,46 +53,53 @@ class UserList extends Component{
     render() {
         const { users } = this.props;
         const { id, show, user } = this.state;
+        const fields = ['#', 'First Name', 'Last Name', 'User Name', 'Operation'];
         return (
             <div className="container">
                 <div className="col-md-12">
-                <Button variant="success" style={{float: "right"}} onClick={this.handleAdd}>Add User</Button>
-                <br />
-                <h2>Users in Expense.com</h2>
+                <TableTitle handleAdd={this.handleAdd} title="Users in Expense.com" btnName="Add User"/>
                 <Table bordered hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Operation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            users.map((user, index) => (
-                                <tr key={index}>
-                                    <td>{index + 1}</td>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{user.userName}</td>
-                                    <td>{
-                                        <div>
-                                            <Button variant="primary" onClick={() => this.handleEdit(index)}>Edit</Button> {' '}
-                                            <Button variant="danger" onClick={() => this.handleOpenDialog(index)}> Delete </Button>
-                                        </div>                                                                                
-                                    }</td>
-                                </tr>
-                            ))
-                        }  
-                    </tbody>
+                    <TableHeader fields = {fields} />
+                    <TableBody data={users} handleEdit={this.handleEdit} handleOpenDialog={this.handleOpenDialog}/>
                 </Table>
                 </div>
-                <Dialog id={id} show={show} handleClose={this.handleClose} handleDelete={() => this.handleDelete} user={user} />
+                <Dialog 
+                    id={id} 
+                    show={show} 
+                    handleClose={this.handleClose} 
+                    handleDelete={() => this.handleDelete} 
+                    obj={user} 
+                    title="Delete User"
+                    body="Do you want to delete selected User Data?"
+                    btnName="Delete"
+                />
             </div>
         )
     }
+}
+
+const TableBody = (props) => {
+    const { data, handleEdit, handleOpenDialog } = props;
+    return (
+        <tbody>
+        {
+            data.map((user, index) => (
+                <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{user.firstName}</td>
+                    <td>{user.lastName}</td>
+                    <td>{user.userName}</td>
+                    <td>{
+                        <div>
+                            <Button variant="primary" onClick={() => handleEdit(index)}>Edit</Button> {' '}
+                            <Button variant="danger" onClick={() => handleOpenDialog(index)}> Delete </Button>
+                        </div>                                                                                
+                    }</td>
+                </tr>
+            ))
+        }
+        </tbody>
+    )
 }
 
 UserList.propTypes = {

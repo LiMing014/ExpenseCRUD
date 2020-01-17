@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
+import ButtonGroup from '../../../components/SubmitButtonGroup';
+import InputGroup from '../../../components/InputGroup';
 import { 
     addUser,
     getUser,
@@ -11,6 +12,7 @@ import {
 } from '../Redux/actions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const initialState = {
     firstName: '',
     lastName: '',
@@ -107,68 +109,19 @@ class UserCreate extends Component {
                 <div style={{width: '60%', margin: 'auto'}}>
                     {!isEdit?<h3>Create New User</h3> : <h3>Edit User</h3>}
                     <form onSubmit={this.onSubmit}>
-                        <div className="form-group"> 
-                            <label>FirstName: </label>
-                            <input  type="text"
-                                    className="form-control"
-                                    placeholder="Type the first Name"
-                                    name="firstName"
-                                    value={ user.firstName }
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgFirstName ? <Alert variant="danger">{errMsgFirstName}</Alert>: ''
-                            }
-                            
-                        </div>
-                        <div className="form-group">
-                            <label>LastName: </label>
-                            <input  type="text" 
-                                    className="form-control"
-                                    placeholder="Type the Last Name"
-                                    name="lastName"
-                                    value={ user!== undefined? user.lastName : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgLastName ? <Alert variant="danger">{errMsgLastName}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <label>User Name: </label>
-                            <input  type="text" 
-                                    className="form-control"
-                                    placeholder="Type the User Name"
-                                    name="userName"
-                                    value={ user!== undefined? user.userName : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgUserName ? <Alert variant="danger">{errMsgUserName}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <label>password: </label>
-                            <input  type="password" 
-                                    className="form-control"
-                                    placeholder="Type the Password"
-                                    name="password"
-                                    value={user!== undefined? user.password : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgPassword ? <Alert variant="danger">{errMsgPassword}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <input type="submit" value="Save" className="btn btn-primary" />{' '}
-                            <input type="button" value="Cancel" className="btn btn-danger" onClick={this.handleCancel}/>
-                        </div>
+                        <InputGroup 
+                            user={user} 
+                            errMsgFirstName={errMsgFirstName} 
+                            errMsgLastName={errMsgLastName}    
+                            errMsgPassword={errMsgPassword}
+                            errMsgUserName={errMsgUserName}
+                            onChangeField={this.onChangeField}
+                        />
+                        <ButtonGroup  handleCancel={this.handleCancel}/>
                     </form>
                 </div>
                 <ToastContainer />
-            </div>
-            
+            </div>           
         )
     }
 }

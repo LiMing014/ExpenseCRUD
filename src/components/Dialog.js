@@ -3,17 +3,17 @@ import { Modal, Button } from "react-bootstrap";
 import { PropTypes } from 'prop-types';
 class Dialog extends Component {
     render() {
-        const {show, handleClose, handleDelete, id, expense } = this.props;
+        const {show, handleClose, handleDelete, id, obj, title, body, btnName } = this.props;
         return (            
-                expense? (
+                obj? (
                     <Modal show={show} onHide={handleClose} animation={false}>
                         <Modal.Header closeButton>
-                        <Modal.Title>Do you really want to delete this Expense?</Modal.Title>
+                        <Modal.Title>{title}</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>Selected data will be deleted! Are you sure?</Modal.Body>
+                        <Modal.Body>{body}</Modal.Body>
                         <Modal.Footer>
                         <Button variant="danger" onClick={handleDelete(id)}>
-                            Delete
+                            {btnName}
                         </Button>
                         <Button variant="primary" onClick={handleClose}>
                             Cancel

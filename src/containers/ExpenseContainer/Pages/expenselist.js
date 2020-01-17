@@ -6,7 +6,10 @@ import {
 } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { deleteExpense } from '../Redux/actions';
-import Dialog from './dialog';
+import Dialog from '../../../components/Dialog';
+import TableTitle from '../../../components/TableTitle';
+import TableHeader from '../../../components/TableHeader';
+
 
 class ExpenseList extends Component{
     constructor(props) {    //To history we have to set the constructor 
@@ -51,51 +54,58 @@ class ExpenseList extends Component{
     render() {
         const { expenses } = this.props;
         const { id, show, expense } = this.state;
-        
+        const fields = ['#', 'Date', 'Description', 'Amount', 'Operation'];
         return (
             <div className="container">
                 <div className="row">
                     <div className="col-xl-12">
                         <div style={{width: '100%', margin: 'auto'}}>
-                            <Button variant="success" style={{float: "right"}} onClick={this.handleAdd}>Add Expense</Button>
-                            
-                            <h2>User's Expense History</h2>
+                            <TableTitle handleAdd={this.handleAdd} title="Users expense history" btnName="Add Expense" />
                             <Table bordered hover>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                    <th>Operation</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        expenses.map((expense, index) => (
-                                            <tr key={index}>
-                                                <td>{index + 1}</td>
-                                                <td>{expense.date}</td>
-                                                <td>{expense.description}</td>
-                                                <td>{expense.amount}</td>
-                                                <td>{
-                                                    <div>
-                                                        <Button variant="primary" onClick={() => this.handleEdit(index)}>Edit</Button> {' '}
-                                                        <Button variant="danger" onClick={() => this.handleOpenDialog(index)}> Delete </Button>
-                                                    </div>                                                                                
-                                                }</td>
-                                            </tr>
-                                        ))
-                                    }  
-                                </tbody>
+                                <TableHeader fields={fields} />
+                                <TableBody data={expenses} handleEdit={this.handleEdit} handleOpenDialog={this.handleOpenDialog} />
                             </Table>
                             </div>
-                        <Dialog id={id} show={show} handleClose={this.handleClose} handleDelete={() => this.handleDelete} expense={expense} />
+                            <Dialog 
+                                id={id}
+                                show={show} 
+                                handleClose={this.handleClose} 
+                                handleDelete={() => this.handleDelete} 
+                                obj={expense} 
+                                title="Delete Expense" 
+                                body="Do you want to delete selected expense data?"
+                                btnName="Delete"
+                            />
                     </div>
                 </div>                
             </div>            
         )
     }
+}
+
+const TableBody = (props) => {
+    const { data, handleEdit, handleOpenDialog } = props;
+    return (
+        <tbody>
+            {
+                data.map((expense, index) => (
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{expense.date}</td>
+                        <td>{expense.description}</td>
+                        <td>{expense.amount}</td>
+                        <td>{
+                            <div>
+                                <Button variant="primary" onClick={() => handleEdit(index)}>Edit</Button> {' '}
+                                <Button variant="danger" onClick={() => handleOpenDialog(index)}> Delete </Button>
+                            </div>                                                                                
+                        }</td>
+                    </tr>
+                ))
+            }  
+        </tbody>
+    );
+
 }
 
 ExpenseList.propTypes = {

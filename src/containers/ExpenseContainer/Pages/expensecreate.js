@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { 
@@ -11,6 +10,8 @@ import {
 } from '../Redux/actions';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InputExpenseGroup from '../../../components/InputExpenseGroup';
+import ButtonGroup from '../../../components/SubmitButtonGroup';
 const initialState = {
     errMsgUserName: '',
     errMsgDate: '',
@@ -110,61 +111,15 @@ class ExpenseCreate extends Component {
                 <div style={{width: '60%', margin: 'auto'}}>
                     {!isEdit? <h3>Add Expense</h3> : <h3>Edit Expense</h3>}
                     <form onSubmit={this.onSubmit}>
-                        <div className="form-group">
-                            <label>Date: </label>
-                            <input  type="date" 
-                                    className="form-control"                                    
-                                    name="date"
-                                    value={ expense.date !== undefined? expense.date : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgDate ? <Alert variant="danger">{errMsgDate}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <label>Description: </label>
-                            <input  type="textarea" 
-                                    className="form-control"
-                                    placeholder="Type the Description"
-                                    name="description"
-                                    value={expense.description !== undefined ? expense.description : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgDescription ? <Alert variant="danger">{errMsgDescription}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <label>Amount: </label>
-                            <input  type="number" 
-                                    className="form-control"
-                                    placeholder="Type the Amount of Expense"
-                                    name="amount"
-                                    value={expense.amount !== undefined ? expense.amount : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgAmount ? <Alert variant="danger">{errMsgAmount}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <label>Comment: </label>
-                            <input  type="textarea" 
-                                    className="form-control"
-                                    placeholder="Type the Comment"
-                                    name="comment"
-                                    value={ expense.comment !== undefined ? expense.comment : ''}
-                                    onChange={this.onChangeField}
-                            />
-                            {
-                                errMsgComment ? <Alert variant="danger">{errMsgComment}</Alert>: ''
-                            }
-                        </div>
-                        <div className="form-group">
-                            <input type="submit" value="Save" className="btn btn-primary" />{' '}
-                            <input type="button" value="Cancel" className="btn btn-danger" onClick={this.handleCancel}/>
-                        </div>
+                        <InputExpenseGroup 
+                            expense={expense}
+                            errMsgDate={errMsgDate}
+                            errMsgAmount={errMsgAmount}
+                            errMsgDescription={errMsgDescription}
+                            errMsgComment={errMsgComment}
+                            onChangeField={this.onChangeField}
+                        />
+                        <ButtonGroup handleCancel={this.handleCancel} />
                     </form>
                 </div>
                 <ToastContainer />
